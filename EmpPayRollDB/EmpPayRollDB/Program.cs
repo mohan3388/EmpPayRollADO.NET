@@ -6,6 +6,7 @@ public class Program
 {
     public static void Main(String[] args)
     {
+        EmployeeRipo empservice = new EmployeeRipo();
         Console.WriteLine("Welcome in the Employee Pay Roll Service");
         EmployeeRipo payrollService = new EmployeeRipo();
         bool check = true;
@@ -20,7 +21,7 @@ public class Program
             {
                 case 1:
                     EmpModel empModel = new EmpModel();
-                    empModel.Id = 111;
+                    //empModel.Id = 111;
                     empModel.Name = "Raunak";
                     empModel.Salary = 50000;
                     empModel.StartDate = DateTime.Now;
@@ -34,6 +35,13 @@ public class Program
                     empModel.IncomeTax = 500;
                     empModel.NetPay = 2000;
                     payrollService.AddEmp(empModel);
+                    break;
+                 case 2:
+                    List<EmpModel> empList = empservice.GetAllEmployees();
+                    foreach (EmpModel data in empList)
+                    {
+                        Console.WriteLine(data.Id + " " + data.Name + " " + data.Salary + " " + data.Gender + " " + data.StartDate + " " + data.Address + " " + data.ContactNumber + " " + data.Pay + " " + data.Texable + " " + data.Deduction + " " + data.IncomeTax + " " + data.NetPay);
+                    }
                     break;
                 case 0:
                     check = false;

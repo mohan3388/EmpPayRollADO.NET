@@ -10,8 +10,8 @@ namespace EmpPayRollDB
 {
     public class EmployeeRipo
     {
-        private SqlConnection con;
-        private void connection()
+        public SqlConnection con;
+        public void connection()
         {
             string connectingString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EmpPayRoll;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             con = new SqlConnection(connectingString);
@@ -56,6 +56,41 @@ namespace EmpPayRollDB
             {
                 this.con.Close();
             }
+        }
+        public List<EmpModel> GetAllEmployees()
+        {
+            connection();
+            List<EmpModel> EmpList = new List<EmpModel>();
+            SqlCommand com = new SqlCommand("spViewPersons", con);
+            com.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataTable dt = new DataTable();
+            con.Open();
+            da.Fill(dt);
+            con.Close();
+            //Bind EmpModel generic list using dataRow     
+            foreach (DataRow dr in dt.Rows)
+            {
+                EmpList.Add(
+                    new EmpModel
+                    {
+                        Id = Convert.ToInt32(dr["Id"]),
+                        Name = Convert.ToString(dr["Name"]),
+                        Salary = Convert.ToDecimal(dr["Salary"]),
+                        StartDate = Convert.ToDateTime(dr["StartDate"]),
+                        Gender = Convert.ToString(dr["Gender"]),
+                        ContactNumber = Convert.ToString(dr["ContactNumber"]),
+                        Address = Convert.ToString(dr["Address"]),
+                        Pay = Convert.ToDecimal(dr["Pay"]),
+                        Deduction = Convert.ToDecimal(dr["Deduction"]),
+                        Texable = Convert.ToDecimal(dr["Texable"]),
+
+                        IncomeTax = Convert.ToDecimal(dr["IncomeTax"]),
+                        NetPay = Convert.ToDecimal(dr["NetPay"])
+                    }
+                    );
+            }
+            return EmpList;
         }
     }
 }
