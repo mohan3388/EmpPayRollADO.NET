@@ -14,7 +14,7 @@ public class Program
 
         while (check)
         {
-            Console.WriteLine("1. To Insert the Data in Database \n2. To Retrieve the Data in Database\n3. To Update the data in Database ");
+            Console.WriteLine("1. To Insert the Data in Database \n2. To Retrieve the Data in Database\n3. To Update the data in Database\n4. To Delete the data in Database");
             Console.WriteLine("Enter the Above Option");
             int option = Convert.ToInt32(Console.ReadLine());
             switch (option)
@@ -22,8 +22,8 @@ public class Program
                 case 1:
                     EmpModel empModel = new EmpModel();
                     //empModel.Id = 111;
-                    empModel.Name = "Raunak";
-                    empModel.Salary = 50000;
+                    empModel.Name = "Govind";
+                    empModel.Salary = 20000;
                     empModel.StartDate = DateTime.Now;
                     empModel.Gender = "M";
                     empModel.ContactNumber = "9541750256";
@@ -48,6 +48,23 @@ public class Program
                     emp.Id = 1;
                     emp.Salary = 90000;
                     empservice.UpdateEmp(emp);
+                    break;
+                case 4:
+                    List<EmpModel> eList = payrollService.GetAllEmployees();
+                    Console.WriteLine("Enter the Employee Id to Delete the Record  From the Table");
+                    int empId = Convert.ToInt32(Console.ReadLine());
+                    foreach (EmpModel data in eList)
+                    {
+                        if (data.Id == empId)
+                        {
+                            payrollService.DeleteEmployee(empId);
+                            Console.WriteLine("Record Successfully Deleted");
+                        }
+                        else
+                        {
+                            Console.WriteLine(empId + "is Not present int he Data base");
+                        }
+                    }
                     break;
                 case 0:
                     check = false;
