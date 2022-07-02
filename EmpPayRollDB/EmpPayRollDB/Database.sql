@@ -1,4 +1,6 @@
 create database EmpPayRoll
+ 
+ select* from AddressBook
 
 use EmpPayRoll
 create table EmpDetail(
@@ -211,3 +213,5 @@ BEGIN TRANSACTION;
 	END CATCH
 END
 GO
+
+

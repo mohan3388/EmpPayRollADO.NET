@@ -36,7 +36,7 @@ public class Program
                     empModel.NetPay = 2000;
                     payrollService.AddEmp(empModel);
                     break;
-                 case 2:
+                case 2:
                     List<EmpModel> empList = empservice.GetAllEmployees();
                     foreach (EmpModel data in empList)
                     {
@@ -65,6 +65,9 @@ public class Program
                             Console.WriteLine(empId + "is Not present int he Data base");
                         }
                     }
+                    break;
+                case 5:
+                    empservice.DataBasedOnDateRange();
                     break;
                 case 0:
                     check = false;

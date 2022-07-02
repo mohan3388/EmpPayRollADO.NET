@@ -11,6 +11,8 @@ namespace EmpPayRollDB
     public class EmployeeRipo
     {
         public SqlConnection con;
+        private SqlConnection sqlConnection;
+
         public void connection()
         {
             string connectingString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EmpPayRoll;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -23,7 +25,7 @@ namespace EmpPayRollDB
                 connection();
                 SqlCommand com = new SqlCommand("spAddNewEmpPersons", con);
                 com.CommandType = CommandType.StoredProcedure;
-               
+
                 com.Parameters.AddWithValue("@Name", obj.Name);
                 com.Parameters.AddWithValue("@Salary", obj.Salary);
                 com.Parameters.AddWithValue("@StartDate", obj.StartDate);
@@ -133,6 +135,39 @@ namespace EmpPayRollDB
             {
                 return false;
             }
+        }
+
+        public string DataBasedOnDateRange()
+        {
+            string nameList = "";
+            try
+            {
+                using (sqlConnection)
+                {
+                    string query = @"select * from employee_payroll where StartDate BETWEEN '2022-01-12' and GetDate()";
+                    SqlCommand command = new SqlCommand(query, this.sqlConnection);
+                    sqlConnection.Open();
+
+                    SqlDataReader sqlDataReader = command.ExecuteReader();
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            DisplayEmployeeDetails(sqlDataReader);
+                            nameList += sqlDataReader["Name"].ToString();
+                        }
+                    }
+                    sqlDataReader.Close();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw new CustomException(CustomException.ExceptionType.No_data_found, "No Data Found");
+            }
+            sqlConnection.Close();
+            return nameList;
+
         }
     }
 }

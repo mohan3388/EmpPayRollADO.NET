@@ -15,6 +15,7 @@ namespace EmpPayRollDB
 
         public decimal Salary { get; set; }
 
+        public string Email { get; set; }
 
         public DateTime StartDate { get; set; }
         public string Gender { get; set; }
