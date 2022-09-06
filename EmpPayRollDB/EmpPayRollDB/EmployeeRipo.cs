@@ -57,40 +57,45 @@ namespace EmpPayRollDB
                 this.con.Close();
             }
         }
-        public List<EmpModel> GetAllEmployees()
+       public List<EmployeeModel> GetAllEmployees()
         {
-            connection();
-            List<EmpModel> EmpList = new List<EmpModel>();
-            SqlCommand com = new SqlCommand("spViewPersons", con);
-            com.CommandType = CommandType.StoredProcedure;
-            SqlDataAdapter da = new SqlDataAdapter(com);
-            DataTable dt = new DataTable();
-            con.Open();
-            da.Fill(dt);
-            con.Close();
-            //Bind EmpModel generic list using dataRow     
-            foreach (DataRow dr in dt.Rows)
-            {
-                EmpList.Add(
-                    new EmpModel
-                    {
-                        Id = Convert.ToInt32(dr["Id"]),
-                        Name = Convert.ToString(dr["Name"]),
-                        Salary = Convert.ToDecimal(dr["Salary"]),
-                        StartDate = Convert.ToDateTime(dr["StartDate"]),
-                        Gender = Convert.ToString(dr["Gender"]),
-                        ContactNumber = Convert.ToString(dr["ContactNumber"]),
-                        Address = Convert.ToString(dr["Address"]),
-                        Pay = Convert.ToDecimal(dr["Pay"]),
-                        Deduction = Convert.ToDecimal(dr["Deduction"]),
-                        Texable = Convert.ToDecimal(dr["Texable"]),
+            List<EmployeeModel> employees = new List<EmployeeModel>();
+            SqlCommand command = new SqlCommand("spViewEmployeeData", connection);
+            command.CommandType = CommandType.StoredProcedure;
+           
+            connection.Open();
+            SqlDataReader row = command.ExecuteReader();
+            
 
-                        IncomeTax = Convert.ToDecimal(dr["IncomeTax"]),
-                        NetPay = Convert.ToDecimal(dr["NetPay"])
-                    }
-                    );
+            EmployeeModel model = new EmployeeModel();
+            if (row.HasRows)
+            {
+                while (row.Read())
+                {
+
+                    model.EmployeeId = row.GetInt32(0);
+                    model.EmployeeName = row.GetString(1);
+                    model.PhoneNumber = row.GetString(2);
+                    model.Address = row.GetString(3);
+                    model.Department = row.GetString(4);
+                    model.Gender = row.GetString(5);
+                    model.BasicPay = row.GetInt32(6);
+                    model.Deductions = row.GetInt32(7);
+                    model.TaxablePay = row.GetInt32(8);
+                    model.Tax = row.GetInt32(9);
+                    model.NetPay = row.GetInt32(10);
+                    model.StartDate = row.GetDateTime(11);
+                    model.City = row.GetString(12);
+                    model.Country = row.GetString(13);
+
+                    employees.Add(model);
+                    Console.WriteLine(model.EmployeeId +" "+model.EmployeeName+ " " + model.PhoneNumber + " " + model.Address + " " + model.Department + " " + model.StartDate + " " + model.Address + " " + model.Gender + " " + model.BasicPay + " " + model.Deductions + " " + model.TaxablePay + " " + model.Tax + " " + model.NetPay + " " + model.StartDate + " " + model.City + " " + model.Country);
+
+                }
             }
-            return EmpList;
+            connection.Close();
+            return employees;
         }
+
     }
 }
