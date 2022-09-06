@@ -37,11 +37,7 @@ public class Program
                     payrollService.AddEmp(empModel);
                     break;
                  case 2:
-                    List<EmpModel> empList = empservice.GetAllEmployees();
-                    foreach (EmpModel data in empList)
-                    {
-                        Console.WriteLine(data.Id + " " + data.Name + " " + data.Salary + " " + data.Gender + " " + data.StartDate + " " + data.Address + " " + data.ContactNumber + " " + data.Pay + " " + data.Texable + " " + data.Deduction + " " + data.IncomeTax + " " + data.NetPay);
-                    }
+                    repo.GetAllEmployees();
                     break;
                 case 0:
                     check = false;
